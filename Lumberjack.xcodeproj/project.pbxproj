@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		830795371DC8E2D7003AA145 /* build */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 8307953A1DC8E2D7003AA145 /* Build configuration list for PBXAggregateTarget "build" */;
+			buildPhases = (
+				8307953B1DC8E2DE003AA145 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = build;
+			productName = build;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		18F3BF081A81D8B700692297 /* CocoaLumberjack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB5C619D4BB6E0096E784 /* CocoaLumberjack.swift */; };
 		18F3BF0A1A81D8B700692297 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DCB3185114EB418E001CFBEE /* CocoaLumberjack.framework */; };
@@ -1295,6 +1309,11 @@
 						CreatedOnToolsVersion = 6.0;
 						LastSwiftMigration = 0800;
 					};
+					830795371DC8E2D7003AA145 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 32A636YFGZ;
+						ProvisioningStyle = Automatic;
+					};
 					DCB3185014EB418E001CFBEE = {
 						LastSwiftMigration = 0800;
 					};
@@ -1329,6 +1348,7 @@
 				19EC14721B84D134000EC2E7 /* watchOSSwiftTest Extension */,
 				19406BE01BDBABFF001194DC /* tvOSSwiftTest */,
 				18F3BFF11A81E0C700692297 /* iOSLibStaticTest */,
+				830795371DC8E2D7003AA145 /* build */,
 			);
 		};
 /* End PBXProject section */
@@ -1455,6 +1475,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8307953B1DC8E2DE003AA145 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo \"- Building CocoaLumberjack.framework\"\n\nCONFIGURATION=\"Release\"\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\nMY_TARGET_NAME=\"CocoaLumberjack-iOS-Static\"\nMY_PRODUCT_NAME=\"CocoaLumberjack\"\n\nCORDOVA_DIR=/Users/chris/workspace/cordova/cordova-plugin-cocoalumberjack/src/ios\n\nrm -rf \"${SRCROOT}/build\"\n\necho \"------------------------- BUILDING -----------------------\"\n\n# make sure the output directory exists\nrm -rf \"${UNIVERSAL_OUTPUTFOLDER}\"\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\necho \"------------ DIR ${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 1. Build Device and Simulator versions\n\nxcodebuild -configuration \"${CONFIGURATION}\" ONLY_ACTIVE_ARCH=NO OTHER_CFLAGS=\"-fembed-bitcode\" -target \"${MY_TARGET_NAME}\" -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" clean build\nxcodebuild -configuration \"${CONFIGURATION}\" OTHER_CFLAGS=\"-fembed-bitcode\" -target \"${MY_TARGET_NAME}\" -sdk iphonesimulator BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\" clean build\n\n# Step 3. Create universal binary file using lipo and place the combined executable in the copied framework directory\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${MY_PRODUCT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${MY_PRODUCT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${MY_PRODUCT_NAME}.a\"\n\n# Step 4. Convenience step to copy the framework to the project's directory\ncp -R \"${BUILD_DIR}/${CONFIGURATION}/-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}\"\n\ncp  \"${UNIVERSAL_OUTPUTFOLDER}/lib${MY_PRODUCT_NAME}.a\" \"${CORDOVA_DIR}\"\n\n# Step 5. Delete temporary build directory in the project's directory\n\nrm -rf \"${SRCROOT}/build/Release-iphoneos/\"\nrm -rf \"${SRCROOT}/build/Release-iphonesimulator/\"\nrm -rf \"${SRCROOT}/build/$TARGET.build/\"\n\n\n# Step 6. Convenience step to open the project's directory in Finder\nopen \"${PROJECT_DIR}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		18F3BF071A81D8B700692297 /* Sources */ = {
@@ -2390,6 +2426,22 @@
 			};
 			name = Release;
 		};
+		830795381DC8E2D7003AA145 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 32A636YFGZ;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		830795391DC8E2D7003AA145 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 32A636YFGZ;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		DCB3186414EB418E001CFBEE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2695,6 +2747,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		8307953A1DC8E2D7003AA145 /* Build configuration list for PBXAggregateTarget "build" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				830795381DC8E2D7003AA145 /* Debug */,
+				830795391DC8E2D7003AA145 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		DCB3184A14EB418D001CFBEE /* Build configuration list for PBXProject "Lumberjack" */ = {
 			isa = XCConfigurationList;
